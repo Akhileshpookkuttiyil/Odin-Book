@@ -1,0 +1,14 @@
+<h1>New Post</h1>
+
+<%= form_with model: @post do |f| %>
+  <%= render "devise/shared/error_messages", resource: @post if @post.errors.any? %>
+  
+  <div>
+    <%= f.label :body, "What's on your mind?" %><br>
+    <%= f.text_area :body, rows: 4 %>
+  </div>
+
+  <div>
+    <%= f.submit "Post" %>
+  </div>
+<% end %>

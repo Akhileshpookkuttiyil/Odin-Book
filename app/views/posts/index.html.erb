@@ -1,0 +1,17 @@
+<h1>All Posts</h1>
+
+<% if user_signed_in? %>
+  <%= link_to "New Post", new_post_path %>
+<% end %>
+
+<% @posts.each do |post| %>
+  <div>
+    <p><%= post.body %></p>
+    <p>By: <%= post.user.name %> | <%= post.created_at.strftime("%B %d, %Y") %></p>
+    <%= link_to "View", post_path(post) %>
+    <% if user_signed_in? && current_user == post.user %>
+      <%= link_to "Delete", post_path(post), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+    <% end %>
+  </div>
+  <hr>
+<% end %>
