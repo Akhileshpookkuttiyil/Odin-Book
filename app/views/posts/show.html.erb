@@ -3,3 +3,32 @@
 <p>Posted: <%= @post.created_at.strftime("%B %d, %Y") %></p>
 
 <%= link_to "Back to Posts", posts_path %>
+
+<hr>
+
+<h3>Comments (<%= @post.comments.count %>)</h3>
+
+<% @post.comments.each do |comment| %>
+  <div>
+    <p><%= comment.body %></p>
+    <p>By: <%= comment.user.name %> | <%= comment.created_at.strftime("%B %d, %Y") %></p>
+    <% if user_signed_in? && current_user == comment.user %>
+      <%= link_to "Delete", post_comment_path(@post, comment), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+    <% end %>
+  </div>
+  <hr>
+<% end %>
+
+<% if user_signed_in? %>
+  <h4>Add a Comment</h4>
+  <%= form_with model: [@post, Comment.new] do |f| %>
+    <div>
+      <%= f.text_area :body, rows: 3, placeholder: "Write a comment..." %>
+    </div>
+    <div>
+      <%= f.submit "Comment" %>
+    </div>
+  <% end %>
+<% else %>
+  <p><%= link_to "Sign in", new_user_session_path %> to comment.</p>
+<% end %>
