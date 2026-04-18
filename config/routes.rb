@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     resources :comments, only: [:create, :destroy]
     resource :like, only: [:create, :destroy]
   end
+  resources :friendships, only: [:index, :create, :update, :destroy]
   get "up" => "rails/health#show", as: :rails_health_check
   root "home#index"
 end
