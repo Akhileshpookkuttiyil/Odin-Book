@@ -2,6 +2,13 @@
   <% existing_friendship = Friendship.find_by(user: current_user, friend: @user) || Friendship.find_by(user: @user, friend: current_user) %>
   
   <% if existing_friendship %>
+  <% if @user.avatar.attached? %>
+    <%= image_tag @user.avatar, width: 150 %>
+  <% else %>
+    <p>[No profile picture]</p>
+  <% end %>
+
+  <h1><%= @user.name %>'s Profile</h1>
     <% if existing_friendship.status == "accepted" %>
       <p>✓ Friends</p>
     <% elsif existing_friendship.user == current_user %>

@@ -36,7 +36,7 @@ class FriendshipsController < ApplicationController
         "(user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)",
         @friendship.user_id, @friendship.friend_id, @friendship.friend_id, @friendship.user_id
       ).destroy_all
-      
+
       redirect_to friendships_path, notice: "Friendship removed."
     else
       redirect_to friendships_path, alert: "Not authorized."
