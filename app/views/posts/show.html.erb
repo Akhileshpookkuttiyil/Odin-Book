@@ -6,6 +6,20 @@
 
 <hr>
 
+<p><strong>Likes: <%= @post.likes.count %></strong></p>
+
+<% if user_signed_in? %>
+  <% if @post.likes.exists?(user: current_user) %>
+    <%= button_to "Unlike", post_like_path(@post), method: :delete %>
+  <% else %>
+    <%= button_to "Like", post_like_path(@post) %>
+  <% end %>
+<% end %>
+
+<hr>
+
+<hr>
+
 <h3>Comments (<%= @post.comments.count %>)</h3>
 
 <% @post.comments.each do |comment| %>
