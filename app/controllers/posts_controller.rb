@@ -3,7 +3,12 @@ class PostsController < ApplicationController
   before_action :set_post, only: [:show, :destroy]
  
   def index
-    @posts = Post.all.order(created_at: :desc)
+    if user_signed_in?
+      friend_ids = current_user.friends.pluck(:id)
+      @posts = Post.where(user_id: [current_user.id] + friend_ids).order(created_at: :desc)
+    else
+      @posts = Post.all.order(created_at: :desc)
+    end
   end
 
   def new
