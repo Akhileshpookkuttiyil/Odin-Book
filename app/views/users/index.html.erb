@@ -1,0 +1,24 @@
+<h1>Find People</h1>
+
+<% @users.each do |user| %>
+  <div>
+    <% if user.avatar.attached? %>
+      <%= image_tag user.avatar, width: 50 %>
+    <% end %>
+    
+    <strong><%= link_to user.name, user_path(user) %></strong>
+    
+    <% if user_signed_in? && current_user != user %>
+      <% existing_friendship = Friendship.find_by(user: current_user, friend: user) || Friendship.find_by(user: user, friend: current_user) %>
+      
+      <% if existing_friendship&.status == "accepted" %>
+        <span>✓ Friends</span>
+      <% elsif existing_friendship %>
+        <span>Request pending</span>
+      <% else %>
+        <%= button_to "Add Friend", friendships_path(friend_id: user.id) %>
+      <% end %>
+    <% end %>
+  </div>
+  <hr>
+<% end %>

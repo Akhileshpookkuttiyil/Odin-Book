@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   get "home/index"
   devise_for :users
-  resources :users, only: [ :show ]
+  resources :users, only: [:index, :show]
   resources :posts, only: [ :index, :new, :create, :show, :destroy ] do
     resources :comments, only: [ :create, :destroy ]
     resource :like, only: [ :create, :destroy ]
