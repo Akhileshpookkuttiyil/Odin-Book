@@ -1,22 +1,39 @@
+<h1><%= @user.name %>'s Profile</h1>
+
+<% if @user.avatar.attached? %>
+  <%= image_tag @user.avatar, width: 150 %>
+<% else %>
+  <p>[No profile picture]</p>
+<% end %>
+
+<p><strong>Email:</strong> <%= @user.email %></p>
+<p><strong>Member since:</strong> <%= @user.created_at.strftime("%B %Y") %></p>
+
 <% if user_signed_in? && current_user != @user %>
   <% existing_friendship = Friendship.find_by(user: current_user, friend: @user) || Friendship.find_by(user: @user, friend: current_user) %>
   
-  <% if existing_friendship %>
-  <% if @user.avatar.attached? %>
-    <%= image_tag @user.avatar, width: 150 %>
-  <% else %>
-    <p>[No profile picture]</p>
-  <% end %>
-
-  <h1><%= @user.name %>'s Profile</h1>
-    <% if existing_friendship.status == "accepted" %>
-      <p>✓ Friends</p>
-    <% elsif existing_friendship.user == current_user %>
-      <p>Friend request sent</p>
-    <% else %>
-      <p>Friend request pending</p>
-    <% end %>
+  <% if existing_friendship&.status == "accepted" %>
+    <p>✓ Friends</p>
+  <% elsif existing_friendship %>
+    <p>Request pending</p>
   <% else %>
     <%= button_to "Add Friend", friendships_path(friend_id: @user.id) %>
   <% end %>
+<% end %>
+
+<hr>
+
+<h2><%= @user.name %>'s Posts</h2>
+
+<% @user.posts.order(created_at: :desc).each do |post| %>
+  <div>
+    <p><%= post.body %></p>
+    <p><small>Posted <%= time_ago_in_words(post.created_at) %> ago</small></p>
+    <p><%= link_to "View Post", post_path(post) %></p>
+  </div>
+  <hr>
+<% end %>
+
+<% if @user.posts.empty? %>
+  <p>No posts yet.</p>
 <% end %>
