@@ -1,4 +1,11 @@
-<p><%= @post.body %></p>
+<% if @post.image.attached? %>
+  <div>
+    <%= image_tag @post.image, style: "max-width: 100%; max-height: 500px; border-radius: 8px;" %>
+  </div>
+<% end %>
+<% if @post.body.present? %>
+  <p><%= @post.body %></p>
+<% end %>
 <p>By: <%= link_to @post.user.name, user_path(@post.user) %></p>
 <p>Posted: <%= @post.created_at.strftime("%B %d, %Y") %></p>
 

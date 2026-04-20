@@ -1,14 +1,15 @@
-<h1>New Post</h1>
+<h1>Create New Post</h1>
 
 <%= form_with model: @post do |f| %>
-  <%= render "devise/shared/error_messages", resource: @post if @post.errors.any? %>
-  
   <div>
-    <%= f.label :body, "What's on your mind?" %><br>
+    <%= f.label :body, "What's on your mind?" %>
     <%= f.text_area :body, rows: 4 %>
   </div>
 
   <div>
-    <%= f.submit "Post" %>
+    <%= f.label :image, "Add a photo (optional)" %>
+    <%= f.file_field :image %>
   </div>
+
+  <%= f.submit "Post" %>
 <% end %>
