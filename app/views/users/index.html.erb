@@ -1,24 +1,27 @@
 <h1>Find People</h1>
 
 <% @users.each do |user| %>
-  <div>
+  <div class="post" style="display: flex; align-items: center; gap: 15px;">
     <% if user.avatar.attached? %>
-      <%= image_tag user.avatar, width: 50 %>
+      <%= image_tag user.avatar, width: 50, style: "border-radius: 50%;" %>
+    <% else %>
+      <div style="width: 50px; height: 50px; background: #ddd; border-radius: 50%;"></div>
     <% end %>
     
-    <strong><%= link_to user.name, user_path(user) %></strong>
+    <div style="flex: 1;">
+      <strong><%= link_to user.name, user_path(user) %></strong>
+    </div>
     
     <% if user_signed_in? && current_user != user %>
       <% existing_friendship = Friendship.find_by(user: current_user, friend: user) || Friendship.find_by(user: user, friend: current_user) %>
       
       <% if existing_friendship&.status == "accepted" %>
-        <span>✓ Friends</span>
+        <span style="color: green;">✓ Friends</span>
       <% elsif existing_friendship %>
-        <span>Request pending</span>
+        <span style="color: orange;">Request pending</span>
       <% else %>
-        <%= button_to "Add Friend", friendships_path(friend_id: user.id) %>
+        <%= button_to "Add Friend", friendships_path(friend_id: user.id), class: "btn" %>
       <% end %>
     <% end %>
   </div>
-  <hr>
 <% end %>
