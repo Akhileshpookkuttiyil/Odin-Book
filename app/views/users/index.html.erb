@@ -18,7 +18,7 @@
       <% if existing_friendship&.status == "accepted" %>
         <span style="color: green;">✓ Friends</span>
       <% elsif existing_friendship %>
-        <span style="color: orange;">Request pending</span>
+        <span style="color: gray;">Request pending</span>
       <% else %>
         <%= button_to "Add Friend", friendships_path(friend_id: user.id), class: "btn" %>
       <% end %>
