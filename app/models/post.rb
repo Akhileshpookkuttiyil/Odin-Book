@@ -4,5 +4,13 @@ class Post < ApplicationRecord
   has_many :likes, dependent: :destroy
   has_one_attached :image 
 
-  validates :body, presence: true
+  validate :must_have_content
+
+  private
+
+  def must_have_content
+    if body.blank? && !image.attached?
+      errors.add(:base, "Post must have either text or an image")
+    end
+  end
 end
