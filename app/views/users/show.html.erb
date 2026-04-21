@@ -29,7 +29,7 @@
   <div>
     <p><%= post.body %></p>
     <p><small>Posted <%= time_ago_in_words(post.created_at) %> ago</small></p>
-    <p><%= link_to "View Post", post_path(post) %></p>
+    <p><%= link_to "View Post", post_path(post) , class:"btn" %></p>
   </div>
   <hr>
 <% end %>

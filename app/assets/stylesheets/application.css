@@ -112,3 +112,18 @@ a:hover {
   background: #db1616;
   color: white;
 }
+
+.btn-like {
+  display: inline-block;
+  background: #1877f2;
+  color: white !important;
+  padding: 8px 8px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-like:hover {
+  background: #166fe5;
+}

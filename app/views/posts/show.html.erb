@@ -17,9 +17,9 @@
 
 <% if user_signed_in? %>
   <% if @post.likes.exists?(user: current_user) %>
-    <%= button_to "Unlike", post_like_path(@post), method: :delete %>
+    <%= button_to "👎 Unlike", post_like_path(@post), method: :delete, class: "btn-like" %>
   <% else %>
-    <%= button_to "Like", post_like_path(@post) %>
+    <%= button_to "👍 Like", post_like_path(@post), class: "btn-like" %>
   <% end %>
 <% end %>
 
