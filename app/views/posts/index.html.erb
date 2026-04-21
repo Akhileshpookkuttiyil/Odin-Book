@@ -1,11 +1,11 @@
 <h1>All Posts</h1>
 
 <% if user_signed_in? %>
-  <%= link_to "New Post", new_post_path %>
+  <%= link_to "New Post", new_post_path, class: "btn" %>
 <% end %>
 
 <% @posts.each do |post| %>
-  <div>
+  <div class="post">
       <% if post.image.attached? %>
         <div>
           <%= image_tag post.image, style: "max-width: 100%; max-height: 300px; border-radius: 8px;" %>
@@ -14,10 +14,10 @@
       <% if post.body.present? %>
         <p><%= post.body %></p>
       <% end %>
-      <p>By: <%= post.user.name %> | <%= post.created_at.strftime("%B %d, %Y") %></p>
-      <%= link_to "View", post_path(post) %>
+      <p><small>By: <%= post.user.name %> | <%= post.created_at.strftime("%B %d, %Y") %></small></p>
+      <%= link_to "View", post_path(post), class: "btn" %>
       <% if user_signed_in? && current_user == post.user %>
-        <%= link_to "Delete", post_path(post), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+        <%= link_to "Delete", post_path(post), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "btn btn-danger" %>
       <% end %>
   </div>
   <hr>

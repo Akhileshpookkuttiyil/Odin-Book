@@ -9,7 +9,7 @@
 <p>By: <%= link_to @post.user.name, user_path(@post.user) %></p>
 <p>Posted: <%= @post.created_at.strftime("%B %d, %Y") %></p>
 
-<%= link_to "Back to Posts", posts_path %>
+<%= link_to "⇐ Back to Posts", posts_path , class: "btn" %>
 
 <hr>
 

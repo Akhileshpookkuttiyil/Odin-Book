@@ -1,10 +1,114 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+* {
+  margin: 3px;
+  padding: 0;
+  box-sizing:border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 2;
+  margin: 0 auto;
+}
+
+nav {
+  background: #f0f0f0;
+  color: white;
+  padding: 10px;
+  text-decoration: none;
+  margin: 0 0 20px 0;
+}
+
+nav a {
+  text-decoration: none;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0px;
+  border: 1px solid #ddd;
+  outline:none;
+}
+
+input[type="submit"],
+button {
+  background: #686666;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  margin: 5px;
+}
+
+input[type="submit"]:hover,
+button:hover {
+  background: #2c2b2b;
+}
+
+.post {
+  background: white;
+  padding: 20px;
+  margin: 15px 0;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.post img {
+  max-width: 100%;
+  border-radius: 5px;
+  margin: 10px 0;
+}
+
+h1, h2, h3 {
+  margin: 15px 0;
+  color: #333;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 20px 0;
+}
+
+a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.btn {
+  display: inline-block;
+  background: transparent;
+  color: #6787a8;
+  padding: 2px 8px;        
+  text-decoration: none;
+  border: 1px solid #6787a8;    
+  border-radius: 3px;
+  margin: 2px;
+  font-size: 0.9rem;             
+}
+
+.btn:hover {
+  background: #6787a8;
+  color: white;
+}
+
+.btn-danger {
+  color: #b42424;
+  border: 1px solid #d80b0b;
+}
+
+.btn-danger:hover {
+  background: #db1616;
+  color: white;
+}
