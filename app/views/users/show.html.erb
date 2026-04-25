@@ -1,7 +1,7 @@
 <h1><%= @user.name %>'s Profile</h1>
 
 <% if @user.avatar.attached? %>
-  <%= image_tag @user.avatar, width: 150 %>
+  <%= image_tag @user.avatar, width: 150, height: 150, style: "border-radius: 50%;" %>
 <% else %>
   <p>[No profile picture]</p>
 <% end %>

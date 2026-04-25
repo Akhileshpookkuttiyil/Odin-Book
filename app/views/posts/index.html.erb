@@ -15,6 +15,7 @@
         <p><%= post.body %></p>
       <% end %>
       <p><small>By: <%= post.user.name %> | <%= post.created_at.strftime("%B %d, %Y") %></small></p>
+      <p><small>👍 <%= post.likes.count %> likes | 💬 <%= post.comments.count %> comments</small></p>
       <%= link_to "View", post_path(post), class: "btn" %>
       <% if user_signed_in? && current_user == post.user %>
         <%= link_to "Delete", post_path(post), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "btn btn-danger" %>
