@@ -1,14 +1,17 @@
 class PostsController < ApplicationController
-  before_action :authenticate_user!, except: [ :index, :show ]
+  before_action :authenticate_user!, except: [:index, :show]
   before_action :set_post_for_destroy, only: [:destroy]
   before_action :set_post, only: [:show]
-
+ 
   def index
     if user_signed_in?
       friend_ids = current_user.friends.pluck(:id)
-      @posts = Post.where(user_id: [ current_user.id ] + friend_ids).order(created_at: :desc)
+      @posts = Post.includes(:user, :likes, :comments, image_attachment: :blob)
+                   .where(user_id: [current_user.id] + friend_ids)
+                   .order(created_at: :desc)
     else
-      @posts = Post.all.order(created_at: :desc)
+      @posts = Post.includes(:user, :likes, :comments, image_attachment: :blob)
+                   .order(created_at: :desc)
     end
   end
 
@@ -43,7 +46,7 @@ class PostsController < ApplicationController
     @post = current_user.posts.find(params[:id])
   end
 
-    def post_params
-     params.require(:post).permit(:body, :image)
-    end
+  def post_params
+    params.require(:post).permit(:body, :image)
+  end
 end

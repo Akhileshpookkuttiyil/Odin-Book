@@ -17,11 +17,12 @@ class FriendshipsController < ApplicationController
   end
 
   def update
-    @friendship = Friendship.find(params[:id])
+    @friendship = current_user.inverse_friendships.find(params[:id])
     if @friendship.friend == current_user
-      @friendship.update(status: "accepted")
-      # Create the reverse friendship so both users see each other as friends
-      Friendship.create(user: current_user, friend: @friendship.user, status: "accepted")
+      ActiveRecord::Base.transaction do
+        @friendship.update!(status: "accepted")
+        Friendship.create!(user: current_user, friend: @friendship.user, status: "accepted")
+      end
       redirect_to friendships_path, notice: "Friend request accepted!"
     else
       redirect_to friendships_path, alert: "Not authorized."
@@ -30,11 +31,13 @@ class FriendshipsController < ApplicationController
 
   def destroy
     @friendship = Friendship.find(params[:id])
+
     if @friendship.user == current_user || @friendship.friend == current_user
-      # Find and destroy both friendship records
-      Friendship.where(
-        "(user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)",
-        @friendship.user_id, @friendship.friend_id, @friendship.friend_id, @friendship.user_id
+      user_id = @friendship.user_id
+      friend_id = @friendship.friend_id
+
+      Friendship.where(user_id: user_id, friend_id: friend_id).or(
+        Friendship.where(user_id: friend_id, friend_id: user_id)
       ).destroy_all
 
       redirect_to friendships_path, notice: "Friendship removed."
