@@ -9,12 +9,10 @@
 <p><strong>Email:</strong> <%= @user.email %></p>
 <p><strong>Member since:</strong> <%= @user.created_at.strftime("%B %Y") %></p>
 
-<% if user_signed_in? && current_user != @user %>
-  <% existing_friendship = Friendship.find_by(user: current_user, friend: @user) || Friendship.find_by(user: @user, friend: current_user) %>
-  
-  <% if existing_friendship&.status == "accepted" %>
+<% if user_signed_in? && current_user != @user %>  
+  <% if @existing_friendship&.status == "accepted" %>
     <p>✓ Friends</p>
-  <% elsif existing_friendship %>
+  <% elsif @existing_friendship %>
     <p>Request pending</p>
   <% else %>
     <%= button_to "Add Friend", friendships_path(friend_id: @user.id) %>
