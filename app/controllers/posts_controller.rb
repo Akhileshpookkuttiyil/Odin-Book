@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
-    before_action :authenticate_user!, except: [ :index, :show ]
-  before_action :set_post, only: [ :show, :destroy ]
+  before_action :authenticate_user!, except: [ :index, :show ]
+  before_action :set_post_for_destroy, only: [:destroy]
+  before_action :set_post, only: [:show]
 
   def index
     if user_signed_in?
@@ -34,8 +35,12 @@ class PostsController < ApplicationController
 
   private
 
-    def set_post
+  def set_post
     @post = Post.find(params[:id])
+  end
+
+  def set_post_for_destroy
+    @post = current_user.posts.find(params[:id])
   end
 
     def post_params
