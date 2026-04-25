@@ -1,24 +1,32 @@
-# README
+# Odin Book
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A Facebook-inspired social media app built with Ruby on Rails as part of The Odin Project curriculum.
 
-Things you may want to cover:
+## Features
+- User authentication with Devise
+- Send, accept and reject friend requests
+- Create posts with text and images
+- Like and unlike posts
+- Comment on posts
+- News feed showing friends' posts
+- User profiles with avatar upload
 
-* Ruby version
+## Tech Stack
+- Ruby on Rails 8.1
+- PostgreSQL
+- Devise
+- Active Storage
 
-* System dependencies
+## Setup
+1. Clone the repo
+   git clone https://github.com/Akhileshpookkuttiyil/Odin-Book.git
+2. Install dependencies
+   bundle install
+3. Setup database
+   rails db:migrate
+4. Start the server
+   rails server
+5. Visit http://localhost:3000
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Login
+Create an account via Sign Up on the homepage.
