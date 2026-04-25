@@ -4,7 +4,12 @@
 <% if @friend_requests.any? %>
   <% @friend_requests.each do |user| %>
     <% friendship = Friendship.find_by(user: user, friend: current_user, status: "pending") %>
-    <div>
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <% if user.avatar.attached? %>
+        <%= image_tag user.avatar, width: 50, style: "border-radius: 50%;" %>
+      <% else %>
+        <div style="width: 50px; height: 50px; background: #ddd; border-radius: 50%;"></div>
+      <% end %>
       <p><%= link_to user.name, user_path(user) %></p>
       <%= button_to "Accept", friendship_path(friendship), method: :patch %>
       <%= button_to "Reject", friendship_path(friendship), method: :delete %>
@@ -19,7 +24,12 @@
 <% if @friends.any? %>
   <% @friends.each do |friend| %>
     <% friendship = Friendship.find_by(user: current_user, friend: friend, status: "accepted") %>
-    <div>
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <% if friend.avatar.attached? %>
+        <%= image_tag friend.avatar, width: 50, style: "border-radius: 50%;" %>
+      <% else %>
+        <div style="width: 50px; height: 50px; background: #ddd; border-radius: 50%;"></div>
+      <% end %>
       <p><%= link_to friend.name, user_path(friend) %></p>
       <%= button_to "Unfriend", friendship_path(friendship), method: :delete, data: { turbo_confirm: "Are you sure?" } %>
     </div>
@@ -33,7 +43,12 @@
 <% if @pending_requests.any? %>
   <% @pending_requests.each do |friend| %>
     <% friendship = Friendship.find_by(user: current_user, friend: friend, status: "pending") %>
-    <div>
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <% if friend.avatar.attached? %>
+        <%= image_tag friend.avatar, width: 50, style: "border-radius: 50%;" %>
+      <% else %>
+        <div style="width: 50px; height: 50px; background: #ddd; border-radius: 50%;"></div>
+      <% end %>
       <p><%= link_to friend.name, user_path(friend) %> (waiting for response)</p>
       <%= button_to "Cancel", friendship_path(friendship), method: :delete %>
     </div>
