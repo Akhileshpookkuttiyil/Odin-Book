@@ -1,3 +1,5 @@
+<%= link_to "⇐ Back", posts_path, class: "btn" %>
+
 <div class="post">
 
   <% if @post.image.attached? %>
@@ -21,9 +23,6 @@
     &nbsp;·&nbsp;
     <%= smart_time(@post.created_at) %>
   </p>
-
-  <%= link_to "⇐ Back", posts_path, class: "btn" %>
-
 </div>
 
 <p><strong>Likes: <%= @post.likes.count %></strong></p>
