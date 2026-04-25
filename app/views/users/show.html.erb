@@ -3,17 +3,26 @@
 <% if @user.avatar.attached? %>
   <%= image_tag @user.avatar, width: 150, height: 150, style: "border-radius: 50%;" %>
 <% else %>
-  <p>[No profile picture]</p>
+  <%# Changed: blue circle instead of plain text %>
+  <div style="width: 80px; height: 80px; border-radius: 50%; background: #1877f2; color: white; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold;">
+    <%= @user.name[0].upcase %>
+  </div>
 <% end %>
 
 <p><strong>Email:</strong> <%= @user.email %></p>
 <p><strong>Member since:</strong> <%= @user.created_at.strftime("%B %Y") %></p>
 
-<% if user_signed_in? && current_user != @user %>  
+<% if user_signed_in? && current_user != @user %>
   <% if @existing_friendship&.status == "accepted" %>
     <p>✓ Friends</p>
   <% elsif @existing_friendship %>
-    <p>Request pending</p>
+    <%# Changed: Accept/Reject if you received the request %>
+    <% if @existing_friendship.friend == current_user %>
+      <%= button_to "Accept", friendship_path(@existing_friendship), method: :patch, class: "btn" %>
+      <%= button_to "Reject", friendship_path(@existing_friendship), method: :delete, class: "btn btn-danger" %>
+    <% else %>
+      <p>Request pending</p>
+    <% end %>
   <% else %>
     <%= button_to "Add Friend", friendships_path(friend_id: @user.id) %>
   <% end %>
@@ -25,9 +34,12 @@
 
 <% @user.posts.order(created_at: :desc).each do |post| %>
   <div>
+    <% if post.image.attached? %>
+      <%= image_tag post.image, style: "max-width: 100%; max-height: 300px; border-radius: 8px;" %>
+    <% end %> 
     <p><%= post.body %></p>
-    <p><small>Posted <%= time_ago_in_words(post.created_at) %> ago</small></p>
-    <p><%= link_to "View Post", post_path(post) , class:"btn" %></p>
+    <p><small>Posted <%= smart_time(post.created_at) %></small></p>
+    <p><%= link_to "View Post", post_path(post), class: "btn" %></p>
   </div>
   <hr>
 <% end %>

@@ -67,6 +67,16 @@ button:hover {
   margin: 10px 0;
 }
 
+.root-hero {
+  margin-top: 50px;
+}
+
+.root-tagline {
+  font-size: 18px;
+  color: #888;
+  margin-bottom: 30px;
+}
+
 .avatar {
   width: 40px;
   height: 40px;

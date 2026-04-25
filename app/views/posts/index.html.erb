@@ -6,20 +6,34 @@
 
 <% @posts.each do |post| %>
   <div class="post">
-      <% if post.image.attached? %>
-        <div>
-          <%= image_tag post.image, style: "max-width: 100%; max-height: 300px; border-radius: 8px;" %>
-        </div>
+
+    <% if post.image.attached? %>
+      <%= image_tag post.image, style: "max-width: 100%; max-height: 300px; border-radius: 8px;" %>
+    <% end %>
+
+    <% if post.body.present? %>
+      <p><%= post.body %></p>
+    <% end %>
+
+    <p style="color: #888; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+      <% if post.user.avatar.attached? %>
+        <%= image_tag post.user.avatar, style: "width: 20px; height: 20px; border-radius: 50%; object-fit: cover;" %>
+      <% else %>
+        <span style="width: 20px; height: 20px; border-radius: 50%; background: #1877f2; color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold;">
+          <%= post.user.name[0].upcase %>
+        </span>
       <% end %>
-      <% if post.body.present? %>
-        <p><%= post.body %></p>
-      <% end %>
-      <p><small>By: <%= post.user.name %> | <%= post.created_at.strftime("%B %d, %Y") %></small></p>
-      <p><small>👍 <%= post.likes.count %> likes | 💬 <%= post.comments.count %> comments</small></p>
-      <%= link_to "View", post_path(post), class: "btn" %>
-      <% if user_signed_in? && current_user == post.user %>
-        <%= link_to "Delete", post_path(post), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "btn btn-danger" %>
-      <% end %>
+      <%= post.user.name %>
+      &nbsp;·&nbsp;
+      <%= smart_time(post.created_at) %>
+    </p>
+
+    <p><small>👍 <%= post.likes.count %> likes | 💬 <%= post.comments.count %> comments</small></p>
+
+    <%= link_to "View", post_path(post), class: "btn" %>
+    <% if user_signed_in? && current_user == post.user %>
+      <%= link_to "Delete", post_path(post), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "btn btn-danger" %>
+    <% end %>
+
   </div>
-  <hr>
 <% end %>

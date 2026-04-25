@@ -7,18 +7,24 @@
     <% else %>
       <div style="width: 50px; height: 50px; background: #ddd; border-radius: 50%;"></div>
     <% end %>
-    
+
     <div style="flex: 1;">
       <strong><%= link_to user.name, user_path(user) %></strong>
     </div>
-    
+
     <% if user_signed_in? && current_user != user %>
-      <% existing_friendship = Friendship.find_by(user: current_user, friend: user) || Friendship.find_by(user: user, friend: current_user) %>
-      
+      <% existing_friendship = Friendship.find_by(user: current_user, friend: user) ||
+                               Friendship.find_by(user: user, friend: current_user) %>
+
       <% if existing_friendship&.status == "accepted" %>
         <span style="color: green;">✓ Friends</span>
       <% elsif existing_friendship %>
+        <% if existing_friendship.friend == current_user %>
+          <%= button_to "Accept", friendship_path(existing_friendship), method: :patch, class: "btn" %>
+          <%= button_to "Reject", friendship_path(existing_friendship), method: :delete, class: "btn btn-danger" %>
+        <% else %>
         <span style="color: gray;">Request pending</span>
+      <% end %>
       <% else %>
         <%= button_to "Add Friend", friendships_path(friend_id: user.id), class: "btn" %>
       <% end %>

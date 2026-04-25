@@ -1,17 +1,30 @@
-<% if @post.image.attached? %>
-  <div>
-    <%= image_tag @post.image, style: "max-width: 100%; max-height: 500px; border-radius: 8px;" %>
-  </div>
-<% end %>
-<% if @post.body.present? %>
-  <p><%= @post.body %></p>
-<% end %>
-<p>By: <%= link_to @post.user.name, user_path(@post.user) %></p>
-<p>Posted: <%= @post.created_at.strftime("%B %d, %Y") %></p>
+<div class="post">
 
-<%= link_to "⇐ Back to Posts", posts_path , class: "btn" %>
+  <% if @post.image.attached? %>
+    <%= image_tag @post.image, style: "max-width: 100%; border-radius: 8px;" %>
+  <% end %>
 
-<hr>
+  <% if @post.body.present? %>
+    <p><%= @post.body %></p>
+  <% end %>
+
+  <p style="color: #888; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+    By:
+    <% if @post.user.avatar.attached? %>
+      <%= image_tag @post.user.avatar, style: "width: 15px; height: 15px; border-radius: 50%; object-fit: cover;" %>
+    <% else %>
+      <span style="width: 24px; height: 24px; border-radius: 50%; background: #1877f2; color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;">
+        <%= @post.user.name[0].upcase %>
+      </span>
+    <% end %>
+    <%= link_to @post.user.name, user_path(@post.user) %>
+    &nbsp;·&nbsp;
+    <%= smart_time(@post.created_at) %>
+  </p>
+
+  <%= link_to "⇐ Back", posts_path, class: "btn" %>
+
+</div>
 
 <p><strong>Likes: <%= @post.likes.count %></strong></p>
 
@@ -25,34 +38,32 @@
 
 <hr>
 
-<hr>
-
 <h3>Comments (<%= @post.comments.count %>)</h3>
 
 <% @post.comments.each do |comment| %>
   <div class="comment-container">
-
-  <div class="comment-avatar">
-    <%= comment.user.name[0].upcase %>
-  </div>
-
-  <div style="width: 100%;">
-    <div class="comment-bubble">
-      <p class="comment-author"><%= comment.user.name %></p>
-      <p class="comment-body"><%= comment.body %></p>
+    <div class="comment-avatar">
+      <% if comment.user.avatar.attached? %>
+        <%= image_tag comment.user.avatar, class: "avatar" %>
+      <% else %>
+        <span class="avatar"><%= comment.user.name[0].upcase %></span>
+      <% end %> 
     </div>
-
-    <%# Outside the bubble, no background %>
-    <div class="comment-meta">
-      <span class="comment-date"><%= comment.created_at.strftime("%B %d, %Y") %></span>
-      <% if user_signed_in? && current_user == comment.user %>
-        <%= link_to "Delete", post_comment_path(@post, comment),
-            class: "comment-delete",
-            data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
-      <% end %>
+    <div style="width: 100%;">
+      <div class="comment-bubble">
+        <p class="comment-author"><%= comment.user.name %></p>
+        <p class="comment-body"><%= comment.body %></p>
+      </div>
+      <div class="comment-meta">
+        <span class="comment-date"><%= smart_time(comment.created_at) %></span>
+        <% if user_signed_in? && current_user == comment.user %>
+          <%= link_to "Delete", post_comment_path(@post, comment),
+              class: "comment-delete",
+              data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+        <% end %>
+      </div>
     </div>
   </div>
-</div>
 <% end %>
 
 <% if user_signed_in? %>
