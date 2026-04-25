@@ -3,12 +3,8 @@ class LikesController < ApplicationController
   before_action :set_post
 
   def create
-    @like = @post.likes.build(user: current_user)
-    if @like.save
-      redirect_to @post, notice: "Post liked!"
-    else
-      redirect_to @post, alert: "Already liked this post."
-    end
+    @post.likes.find_or_create_by(user: current_user)
+    redirect_to @post, notice: "Post liked!"
   end
 
   def destroy
