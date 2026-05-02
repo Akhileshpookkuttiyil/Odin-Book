@@ -1,13 +1,38 @@
-<div class="root-hero">
-  <h1>📘 Odin Book</h1>
-  <p class="root-tagline">Connect with friends and share your world.</p>
+<div class="hero">
+  <div class="hero-card">
+    <h1 class="hero-title">OdinBook</h1>
 
-  <% if user_signed_in? %>
-    <p>Welcome back, <strong><%= current_user.name || current_user.email %>!</strong></p>
-    <%= link_to "Go to Feed", posts_path, class: "btn" %>
-    <%= link_to "Sign Out", destroy_user_session_path, data: { turbo_method: :delete }, class: "btn btn-secondary" %>
-  <% else %>
-    <%= link_to "Sign Up", new_user_registration_path, class: "btn" %>
-    <%= link_to "Sign In", new_user_session_path, class: "btn btn-secondary" %>
-  <% end %>
+    <p class="hero-tagline">
+      Connect with friends and share your world.
+    </p>
+
+    <% if user_signed_in? %>
+      <p class="hero-text">
+        Welcome back,
+        <strong><%= current_user.name || current_user.email %></strong>
+      </p>
+
+      <div class="hero-actions">
+        <%= link_to "Go to Feed", posts_path, class: "btn-primary" %>
+
+        <%= link_to "Sign Out",
+        destroy_user_session_path,
+        data: { turbo_method: :delete },
+        class: "btn-secondary" %>
+      </div>
+
+    <% else %>
+
+      <div class="hero-actions">
+        <%= link_to "Sign Up",
+        new_user_registration_path,
+        class: "btn-primary" %>
+
+        <%= link_to "Sign In",
+        new_user_session_path,
+        class: "btn-secondary" %>
+      </div>
+
+    <% end %>
+  </div>
 </div>
