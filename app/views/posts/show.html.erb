@@ -1,80 +1,150 @@
-<%= link_to "⇐ Back", posts_path, class: "btn" %>
+<div class="post-page">
 
-<div class="post">
+  <%= link_to "← Back to Posts", posts_path, class: "btn back-btn" %>
 
-  <% if @post.image.attached? %>
-    <%= image_tag @post.image, style: "max-width: 100%; border-radius: 8px;" %>
-  <% end %>
+  <div class="post">
 
-  <% if @post.body.present? %>
-    <p><%= @post.body %></p>
-  <% end %>
-
-  <p style="color: #888; font-size: 13px; display: flex; align-items: center; gap: 6px;">
-    By:
-    <% if @post.user.avatar.attached? %>
-      <%= image_tag @post.user.avatar, style: "width: 15px; height: 15px; border-radius: 50%; object-fit: cover;" %>
-    <% else %>
-      <span style="width: 24px; height: 24px; border-radius: 50%; background: #1877f2; color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;">
-        <%= @post.user.name[0].upcase %>
-      </span>
-    <% end %>
-    <%= link_to @post.user.name, user_path(@post.user) %>
-    &nbsp;·&nbsp;
-    <%= smart_time(@post.created_at) %>
-  </p>
-</div>
-
-<p><strong>Likes: <%= @post.likes.count %></strong></p>
-
-<% if user_signed_in? %>
-  <% if @post.likes.exists?(user: current_user) %>
-    <%= button_to "👎 Unlike", post_like_path(@post), method: :delete, class: "btn-unlike" %>
-  <% else %>
-    <%= button_to "👍 Like", post_like_path(@post), class: "btn-like" %>
-  <% end %>
-<% end %>
-
-<hr>
-
-<h3>Comments (<%= @post.comments.count %>)</h3>
-
-<% @post.comments.each do |comment| %>
-  <div class="comment-container">
-    <div class="comment-avatar">
-      <% if comment.user.avatar.attached? %>
-        <%= image_tag comment.user.avatar, class: "avatar" %>
+    <div class="post-header">
+      <% if @post.user.avatar.attached? %>
+        <%= image_tag @post.user.avatar, class: "post-avatar" %>
       <% else %>
-        <span class="avatar"><%= comment.user.name[0].upcase %></span>
-      <% end %> 
-    </div>
-    <div style="width: 100%;">
-      <div class="comment-bubble">
-        <p class="comment-author"><%= comment.user.name %></p>
-        <p class="comment-body"><%= comment.body %></p>
+        <div class="post-avatar-fallback">
+          <%= @post.user.name[0].upcase %>
+        </div>
+      <% end %>
+
+      <div class="post-user-info">
+        <%= link_to @post.user.name,
+        user_path(@post.user),
+        class: "post-author" %>
+
+        <p class="post-time">
+          <%= smart_time(@post.created_at) %>
+        </p>
       </div>
-      <div class="comment-meta">
-        <span class="comment-date"><%= smart_time(comment.created_at) %></span>
-        <% if user_signed_in? && current_user == comment.user %>
-          <%= link_to "Delete", post_comment_path(@post, comment),
-              class: "comment-delete",
-              data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+    </div>
+
+    <% if @post.body.present? %>
+      <p class="post-body">
+        <%= @post.body %>
+      </p>
+    <% end %>
+
+    <% if @post.image.attached? %>
+      <%= image_tag @post.image, class: "post-image" %>
+    <% end %>
+
+    <div class="post-stats">
+      <span>👍 <%= @post.likes.count %> Likes</span>
+      <span>💬 <%= @post.comments.count %> Comments</span>
+    </div>
+
+    <% if user_signed_in? %>
+      <div class="post-actions">
+        <% if @post.likes.exists?(user: current_user) %>
+          <%= button_to "👎 Unlike",
+          post_like_path(@post),
+          method: :delete,
+          class: "btn-unlike" %>
+
+        <% else %>
+
+          <%= button_to "👍 Like",
+          post_like_path(@post),
+          class: "btn-like" %>
+
         <% end %>
       </div>
-    </div>
-  </div>
-<% end %>
+    <% end %>
 
-<% if user_signed_in? %>
-  <h4>Add a Comment</h4>
-  <%= form_with model: [@post, Comment.new] do |f| %>
-    <div>
-      <%= f.text_area :body, rows: 3, placeholder: "Write a comment..." %>
+  </div>
+
+  <div class="comments-section">
+
+    <h3 class="comments-title">
+      Comments (<%= @post.comments.count %>)
+    </h3>
+
+    <% @post.comments.each do |comment| %>
+
+      <div class="comment-container">
+
+        <% if comment.user.avatar.attached? %>
+          <%= image_tag comment.user.avatar, class: "comment-avatar-image" %>
+
+        <% else %>
+
+          <div class="comment-avatar">
+            <%= comment.user.name[0].upcase %>
+          </div>
+
+        <% end %>
+
+        <div class="comment-content">
+
+          <div class="comment-bubble">
+            <p class="comment-author">
+              <%= comment.user.name %>
+            </p>
+
+            <p class="comment-body">
+              <%= comment.body %>
+            </p>
+          </div>
+
+          <div class="comment-meta">
+
+            <span class="comment-date">
+              <%= smart_time(comment.created_at) %>
+            </span>
+
+            <% if user_signed_in? && current_user == comment.user %>
+              <%= link_to "Delete",
+              post_comment_path(@post, comment),
+              class: "comment-delete",
+              data: {
+                turbo_method: :delete,
+                turbo_confirm: "Are you sure?"
+              } %>
+            <% end %>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    <% end %>
+
+  </div>
+
+  <% if user_signed_in? %>
+
+    <div class="comment-form-card">
+
+      <h4>Add a Comment</h4>
+
+      <%= form_with model: [@post, Comment.new] do |f| %>
+
+        <div class="form-group">
+          <%= f.text_area :body,
+          rows: 3,
+          placeholder: "Write a comment..." %>
+        </div>
+
+        <%= f.submit "Comment", class: "submit-btn" %>
+
+      <% end %>
+
     </div>
-    <div>
-      <%= f.submit "Comment" %>
+
+  <% else %>
+
+    <div class="signin-message">
+      <%= link_to "Sign in", new_user_session_path %>
+      to comment.
     </div>
+
   <% end %>
-<% else %>
-  <p><%= link_to "Sign in", new_user_session_path %> to comment.</p>
-<% end %>
+
+</div>
