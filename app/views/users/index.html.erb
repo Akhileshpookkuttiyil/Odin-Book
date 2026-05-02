@@ -1,33 +1,88 @@
-<h1>Find People</h1>
+<div class="page-header">
+  <h1>Find People</h1>
+</div>
 
-<% @users.each do |user| %>
-  <div class="post" style="display: flex; align-items: center; gap: 15px;">
-    <% if user.avatar.attached? %>
-      <%= image_tag user.avatar, width: 50, style: "border-radius: 50%;" %>
-    <% else %>
-      <div style="width: 50px; height: 50px; background: #ddd; border-radius: 50%;"></div>
-    <% end %>
+<div class="users-list">
 
-    <div style="flex: 1;">
-      <strong><%= link_to user.name, user_path(user) %></strong>
+  <% @users.each do |user| %>
+
+    <div class="user-card">
+
+      <div class="user-info">
+
+        <% if user.avatar.attached? %>
+          <%= image_tag user.avatar, class: "user-avatar" %>
+
+        <% else %>
+
+          <div class="user-avatar-fallback">
+            <%= user.name[0].upcase %>
+          </div>
+
+        <% end %>
+
+        <div class="user-details">
+          <%= link_to user.name,
+          user_path(user),
+          class: "user-name" %>
+        </div>
+
+      </div>
+
+      <% if user_signed_in? && current_user != user %>
+
+        <% existing_friendship =
+          Friendship.find_by(user: current_user, friend: user) ||
+          Friendship.find_by(user: user, friend: current_user) %>
+
+        <div class="user-action">
+
+          <% if existing_friendship&.status == "accepted" %>
+
+            <span class="friend-badge">
+              ✓ Friends
+            </span>
+
+          <% elsif existing_friendship %>
+
+            <% if existing_friendship.friend == current_user %>
+
+              <div class="friend-request-actions">
+
+                <%= button_to "Accept",
+                friendship_path(existing_friendship),
+                method: :patch,
+                class: "btn" %>
+
+                <%= button_to "Reject",
+                friendship_path(existing_friendship),
+                method: :delete,
+                class: "btn btn-danger" %>
+
+              </div>
+
+            <% else %>
+
+              <span class="pending-badge">
+                Request Pending
+              </span>
+
+            <% end %>
+
+          <% else %>
+
+            <%= button_to "Add Friend",
+            friendships_path(friend_id: user.id),
+            class: "btn" %>
+
+          <% end %>
+
+        </div>
+
+      <% end %>
+
     </div>
 
-    <% if user_signed_in? && current_user != user %>
-      <% existing_friendship = Friendship.find_by(user: current_user, friend: user) ||
-                               Friendship.find_by(user: user, friend: current_user) %>
+  <% end %>
 
-      <% if existing_friendship&.status == "accepted" %>
-        <span style="color: green;">✓ Friends</span>
-      <% elsif existing_friendship %>
-        <% if existing_friendship.friend == current_user %>
-          <%= button_to "Accept", friendship_path(existing_friendship), method: :patch, class: "btn" %>
-          <%= button_to "Reject", friendship_path(existing_friendship), method: :delete, class: "btn btn-danger" %>
-        <% else %>
-        <span style="color: gray;">Request pending</span>
-      <% end %>
-      <% else %>
-        <%= button_to "Add Friend", friendships_path(friend_id: user.id), class: "btn" %>
-      <% end %>
-    <% end %>
-  </div>
-<% end %>
+</div>

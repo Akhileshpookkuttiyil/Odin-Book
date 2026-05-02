@@ -1,49 +1,163 @@
-<h1><%= @user.name %>'s Profile</h1>
+<div class="profile-page">
 
-<% if @user.avatar.attached? %>
-  <%= image_tag @user.avatar, width: 150, height: 150, style: "border-radius: 50%;" %>
-<% else %>
-  <%# Changed: blue circle instead of plain text %>
-  <div style="width: 80px; height: 80px; border-radius: 50%; background: #1877f2; color: white; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold;">
-    <%= @user.name[0].upcase %>
-  </div>
-<% end %>
+  <div class="profile-card">
 
-<p><strong>Email:</strong> <%= @user.email %></p>
-<p><strong>Member since:</strong> <%= @user.created_at.strftime("%B %Y") %></p>
+    <div class="profile-header">
 
-<% if user_signed_in? && current_user != @user %>
-  <% if @existing_friendship&.status == "accepted" %>
-    <p>✓ Friends</p>
-  <% elsif @existing_friendship %>
-    <%# Changed: Accept/Reject if you received the request %>
-    <% if @existing_friendship.friend == current_user %>
-      <%= button_to "Accept", friendship_path(@existing_friendship), method: :patch, class: "btn" %>
-      <%= button_to "Reject", friendship_path(@existing_friendship), method: :delete, class: "btn btn-danger" %>
-    <% else %>
-      <p>Request pending</p>
+      <% if @user.avatar.attached? %>
+
+        <%= image_tag @user.avatar, class: "profile-avatar" %>
+
+      <% else %>
+
+        <div class="profile-avatar-fallback">
+          <%= @user.name[0].upcase %>
+        </div>
+
+      <% end %>
+
+      <div class="profile-info">
+
+        <h1 class="profile-name">
+          <%= @user.name %>
+        </h1>
+
+        <p class="profile-email">
+          <%= @user.email %>
+        </p>
+
+        <p class="profile-member-since">
+          Member since <%= @user.created_at.strftime("%B %Y") %>
+        </p>
+
+      </div>
+
+    </div>
+
+    <% if user_signed_in? && current_user != @user %>
+
+      <div class="profile-actions">
+
+        <% if @existing_friendship&.status == "accepted" %>
+
+          <span class="friend-badge">
+            ✓ Friends
+          </span>
+
+        <% elsif @existing_friendship %>
+
+          <% if @existing_friendship.friend == current_user %>
+
+            <div class="friend-request-actions">
+
+              <%= button_to "Accept",
+              friendship_path(@existing_friendship),
+              method: :patch,
+              class: "btn" %>
+
+              <%= button_to "Reject",
+              friendship_path(@existing_friendship),
+              method: :delete,
+              class: "btn btn-danger" %>
+
+            </div>
+
+          <% else %>
+
+            <span class="pending-badge">
+              Request Pending
+            </span>
+
+          <% end %>
+
+        <% else %>
+
+          <%= button_to "Add Friend",
+          friendships_path(friend_id: @user.id),
+          class: "btn" %>
+
+        <% end %>
+
+      </div>
+
     <% end %>
-  <% else %>
-    <%= button_to "Add Friend", friendships_path(friend_id: @user.id) %>
-  <% end %>
-<% end %>
 
-<hr>
-
-<h2><%= @user.name %>'s Posts</h2>
-
-<% @user.posts.order(created_at: :desc).each do |post| %>
-  <div>
-    <% if post.image.attached? %>
-      <%= image_tag post.image, style: "max-width: 100%; max-height: 300px; border-radius: 8px;" %>
-    <% end %> 
-    <p><%= post.body %></p>
-    <p><small>Posted <%= smart_time(post.created_at) %></small></p>
-    <p><%= link_to "View Post", post_path(post), class: "btn" %></p>
   </div>
-  <hr>
-<% end %>
 
-<% if @user.posts.empty? %>
-  <p>No posts yet.</p>
-<% end %>
+  <div class="profile-posts-section">
+
+    <div class="page-header">
+      <h2><%= @user.name %>'s Posts</h2>
+    </div>
+
+    <% if @user.posts.any? %>
+
+      <% @user.posts.order(created_at: :desc).each do |post| %>
+
+        <div class="post">
+
+          <div class="post-header">
+
+            <% if @user.avatar.attached? %>
+
+              <%= image_tag @user.avatar, class: "post-avatar" %>
+
+            <% else %>
+
+              <div class="post-avatar-fallback">
+                <%= @user.name[0].upcase %>
+              </div>
+
+            <% end %>
+
+            <div class="post-user-info">
+
+              <p class="post-author">
+                <%= @user.name %>
+              </p>
+
+              <p class="post-time">
+                <%= smart_time(post.created_at) %>
+              </p>
+
+            </div>
+
+          </div>
+
+          <% if post.body.present? %>
+
+            <p class="post-body">
+              <%= post.body %>
+            </p>
+
+          <% end %>
+
+          <% if post.image.attached? %>
+
+            <%= image_tag post.image, class: "post-image" %>
+
+          <% end %>
+
+          <div class="post-actions">
+
+            <%= link_to "View Post",
+            post_path(post),
+            class: "btn" %>
+
+          </div>
+
+        </div>
+
+      <% end %>
+
+    <% else %>
+
+      <div class="empty-posts">
+        No posts yet.
+      </div>
+
+    <% end %>
+
+  </div>
+
+</div>
