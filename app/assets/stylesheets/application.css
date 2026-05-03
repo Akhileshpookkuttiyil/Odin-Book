@@ -703,18 +703,63 @@ button:hover {
 .auth-actions {
   margin-top: 10px;
 }
+.password-hint {
+  display: inline-block;
+
+  margin-top: 6px;
+  margin-bottom: 10px;
+
+  padding: 4px 10px;
+
+  background: #f0f2f5;
+  color: #65676b;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 500;
+}
+
+#error_explanation {
+  background: #fde8e8;
+
+  border: 1px solid #f5c2c7;
+
+  color: #b42318;
+
+  padding: 16px;
+
+  border-radius: 12px;
+
+  margin-bottom: 20px;
+}
+
+#error_explanation h2 {
+  font-size: 16px;
+
+  margin-bottom: 10px;
+}
+
+#error_explanation ul {
+  padding-left: 18px;
+}
+
+#error_explanation li {
+  margin-bottom: 6px;
+}
 
 .auth-submit-btn {
   width: 100%;
-
   border: none;
-
   cursor: pointer;
 }
 
 .auth-links {
-  margin-top: 20px;
-
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 25px;
   text-align: center;
 }
 
