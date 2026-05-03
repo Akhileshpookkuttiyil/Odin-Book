@@ -70,6 +70,92 @@ img {
   color: #1877f2;
 }
 
+.navbar-user-avatar,
+.navbar-user-avatar-fallback {
+  width: 36px;
+  height: 36px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #1877f2;
+  color: white;
+
+  font-size: 14px;
+  font-weight: bold;
+
+  flex-shrink: 0;
+}
+
+.navbar-username {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.profile-dropdown {
+  position: relative;
+}
+
+.dropdown-trigger {
+  list-style: none;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+
+  font-size: 12px;
+  color: #555;
+}
+
+.dropdown-trigger::-webkit-details-marker {
+  display: none;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 35px;
+  right: 0;
+
+  width: 180px;
+
+  background: white;
+
+  border-radius: 12px;
+
+  border: 1px solid #ddd;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+
+  overflow: hidden;
+
+  z-index: 1000;
+}
+
+.dropdown-item {
+  display: block;
+
+  padding: 12px 16px;
+
+  color: #333;
+
+  transition: 0.2s;
+}
+
+.dropdown-item:hover {
+  background: #f0f2f5;
+}
+
+.logout-item {
+  color: #dc2626;
+}
+
 .container {
   max-width: 950px;
   margin: 25px auto;
