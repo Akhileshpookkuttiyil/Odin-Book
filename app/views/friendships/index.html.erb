@@ -1,59 +1,231 @@
-<h1>My Friends</h1>
+<div class="friends-page">
 
-<h3>Friend Requests (<%= @friend_requests.count %>)</h3>
-<% if @friend_requests.any? %>
-  <% @friend_requests.each do |user| %>
-    <% friendship = Friendship.find_by(user: user, friend: current_user, status: "pending") %>
-    <div style="display: flex; align-items: center; gap: 15px;">
-      <% if user.avatar.attached? %>
-        <%= image_tag user.avatar, width: 50, style: "border-radius: 50%;" %>
-      <% else %>
-        <div style="width: 50px; height: 50px; background: #ddd; border-radius: 50%;"></div>
-      <% end %>
-      <p><%= link_to user.name, user_path(user) %></p>
-      <%= button_to "Accept", friendship_path(friendship), method: :patch %>
-      <%= button_to "Reject", friendship_path(friendship), method: :delete %>
-    </div>
-    <hr>
-  <% end %>
-<% else %>
-  <p>No pending friend requests.</p>
-<% end %>
+  <div class="friends-section">
 
-<h3>My Friends (<%= @friends.count %>)</h3>
-<% if @friends.any? %>
-  <% @friends.each do |friend| %>
-    <% friendship = Friendship.find_by(user: current_user, friend: friend, status: "accepted") %>
-    <div style="display: flex; align-items: center; gap: 15px;">
-      <% if friend.avatar.attached? %>
-        <%= image_tag friend.avatar, width: 50, style: "border-radius: 50%;" %>
-      <% else %>
-        <div style="width: 50px; height: 50px; background: #ddd; border-radius: 50%;"></div>
-      <% end %>
-      <p><%= link_to friend.name, user_path(friend) %></p>
-      <%= button_to "Unfriend", friendship_path(friendship), method: :delete, data: { turbo_confirm: "Are you sure?" } %>
+    <div class="section-header">
+      <h2>Friend Requests</h2>
+      <span class="section-count">
+        <%= @friend_requests.count %>
+      </span>
     </div>
-    <hr>
-  <% end %>
-<% else %>
-  <p>You have no friends yet.</p>
-<% end %>
 
-<h3>Pending Requests (<%= @pending_requests.count %>)</h3>
-<% if @pending_requests.any? %>
-  <% @pending_requests.each do |friend| %>
-    <% friendship = Friendship.find_by(user: current_user, friend: friend, status: "pending") %>
-    <div style="display: flex; align-items: center; gap: 15px;">
-      <% if friend.avatar.attached? %>
-        <%= image_tag friend.avatar, width: 50, style: "border-radius: 50%;" %>
-      <% else %>
-        <div style="width: 50px; height: 50px; background: #ddd; border-radius: 50%;"></div>
-      <% end %>
-      <p><%= link_to friend.name, user_path(friend) %> (waiting for response)</p>
-      <%= button_to "Cancel", friendship_path(friendship), method: :delete %>
+    <% if @friend_requests.any? %>
+
+      <div class="friends-list">
+
+        <% @friend_requests.each do |user| %>
+
+          <% friendship = Friendship.find_by(
+            user: user,
+            friend: current_user,
+            status: "pending"
+          ) %>
+
+          <div class="friend-card">
+
+            <div class="friend-info">
+
+              <% if user.avatar.attached? %>
+
+                <%= image_tag user.avatar, class: "friend-avatar" %>
+
+              <% else %>
+
+                <div class="friend-avatar-fallback">
+                  <%= user.name[0].upcase %>
+                </div>
+
+              <% end %>
+
+              <div class="friend-details">
+
+                <%= link_to user.name,
+                user_path(user),
+                class: "friend-name" %>
+
+              </div>
+
+            </div>
+
+            <div class="friend-actions">
+
+              <%= button_to "Accept",
+              friendship_path(friendship),
+              method: :patch,
+              class: "btn" %>
+
+              <%= button_to "Reject",
+              friendship_path(friendship),
+              method: :delete,
+              class: "btn btn-danger" %>
+
+            </div>
+
+          </div>
+
+        <% end %>
+
+      </div>
+
+    <% else %>
+
+      <div class="empty-state">
+        No pending friend requests.
+      </div>
+
+    <% end %>
+
+  </div>
+
+  <div class="friends-section">
+
+    <div class="section-header">
+      <h2>My Friends</h2>
+      <span class="section-count">
+        <%= @friends.count %>
+      </span>
     </div>
-    <hr>
-  <% end %>
-<% else %>
-  <p>No pending requests.</p>
-<% end %>
+
+    <% if @friends.any? %>
+
+      <div class="friends-list">
+
+        <% @friends.each do |friend| %>
+
+          <% friendship = Friendship.find_by(
+            user: current_user,
+            friend: friend,
+            status: "accepted"
+          ) %>
+
+          <div class="friend-card">
+
+            <div class="friend-info">
+
+              <% if friend.avatar.attached? %>
+
+                <%= image_tag friend.avatar, class: "friend-avatar" %>
+
+              <% else %>
+
+                <div class="friend-avatar-fallback">
+                  <%= friend.name[0].upcase %>
+                </div>
+
+              <% end %>
+
+              <div class="friend-details">
+
+                <%= link_to friend.name,
+                user_path(friend),
+                class: "friend-name" %>
+
+              </div>
+
+            </div>
+
+            <div class="friend-actions">
+
+              <%= button_to "Unfriend",
+              friendship_path(friendship),
+              method: :delete,
+              data: {
+                turbo_confirm: "Are you sure?"
+              },
+              class: "btn btn-danger" %>
+
+            </div>
+
+          </div>
+
+        <% end %>
+
+      </div>
+
+    <% else %>
+
+      <div class="empty-state">
+        You have no friends yet.
+      </div>
+
+    <% end %>
+
+  </div>
+
+  <div class="friends-section">
+
+    <div class="section-header">
+      <h2>Pending Requests</h2>
+      <span class="section-count">
+        <%= @pending_requests.count %>
+      </span>
+    </div>
+
+    <% if @pending_requests.any? %>
+
+      <div class="friends-list">
+
+        <% @pending_requests.each do |friend| %>
+
+          <% friendship = Friendship.find_by(
+            user: current_user,
+            friend: friend,
+            status: "pending"
+          ) %>
+
+          <div class="friend-card">
+
+            <div class="friend-info">
+
+              <% if friend.avatar.attached? %>
+
+                <%= image_tag friend.avatar, class: "friend-avatar" %>
+
+              <% else %>
+
+                <div class="friend-avatar-fallback">
+                  <%= friend.name[0].upcase %>
+                </div>
+
+              <% end %>
+
+              <div class="friend-details">
+
+                <%= link_to friend.name,
+                user_path(friend),
+                class: "friend-name" %>
+
+                <p class="pending-text">
+                  Waiting for response
+                </p>
+
+              </div>
+
+            </div>
+
+            <div class="friend-actions">
+
+              <%= button_to "Cancel",
+              friendship_path(friendship),
+              method: :delete,
+              class: "btn btn-danger" %>
+
+            </div>
+
+          </div>
+
+        <% end %>
+
+      </div>
+
+    <% else %>
+
+      <div class="empty-state">
+        No pending requests.
+      </div>
+
+    <% end %>
+
+  </div>
+
+</div>
